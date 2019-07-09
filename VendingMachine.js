@@ -11,7 +11,16 @@ class VendingMachine {
     this.till = { 10: 0, 50: 0, 100: 0, 500: 0 };
     this.selectedRow = null;
     this.selectedColumn = null;
-    this.inventory = [];
+    this.inventory = [[], [], [], []];
+  }
+  addInventory({ name, price, count }) {
+    const newItem = { name: name, price: price, count: count };
+    for (const row of this.inventory) {
+      if (row.length < 4) {
+        row.push(newItem);
+        return;
+      }
+    }
   }
   insertCoin(number) {
     this.balance = number;
