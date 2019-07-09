@@ -24,28 +24,6 @@ class VendingMachine {
     }
   }
 
-  pushOrderButton() {
-    const rowIndices = { A: 0, B: 1, C: 2, D: 3 };
-    const rowIndex = rowIndices[this.selectedRow];
-    let availability;
-    let item;
-    if (this.selectedRow && this.selectedColumn) {
-      availability = this.checkIfInventory(rowIndex);
-      item = this.inventory[rowIndex][this.selectedColumn - 1];
-    } else {
-      console.log("Please make a valid selection.");
-    }
-    if (availability && this.checkIfEnoughMoney(item.price)) {
-      console.log("Please enjoy your", item.name);
-      item.count--;
-      if (this.balance > item.price) {
-        this.dispenseChange(item.price);
-      }
-    }
-    this.selectedRow = null;
-    this.selectedColumn = null;
-  }
-
   insertCoin(number) {
     this.balance = number;
     for (const key in this.till) {
@@ -69,6 +47,28 @@ class VendingMachine {
       this.selectedColumn = columnNumber;
     }
     console.log(this.selectedColumn);
+  }
+
+  pushOrderButton() {
+    const rowIndices = { A: 0, B: 1, C: 2, D: 3 };
+    const rowIndex = rowIndices[this.selectedRow];
+    let availability;
+    let item;
+    if (this.selectedRow && this.selectedColumn) {
+      availability = this.checkIfInventory(rowIndex);
+      item = this.inventory[rowIndex][this.selectedColumn - 1];
+    } else {
+      console.log("Please make a valid selection.");
+    }
+    if (availability && this.checkIfEnoughMoney(item.price)) {
+      console.log("Please enjoy your", item.name);
+      item.count--;
+      if (this.balance > item.price) {
+        this.dispenseChange(item.price);
+      }
+    }
+    this.selectedRow = null;
+    this.selectedColumn = null;
   }
 
   checkIfInventory(rowIndex) {
