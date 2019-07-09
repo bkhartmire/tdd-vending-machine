@@ -9,10 +9,11 @@ Read about it here: https://www.sitepoint.com/understanding-module-exports-expor
 class VendingMachine {
   constructor() {
     this.balance = 0;
-    this.till = { 10: 0, 50: 0, 100: 0, 500: 0 };
+    this.till = { 10: 10, 50: 10, 100: 10, 500: 10 };
     this.selectedRow = null;
     this.selectedColumn = null;
     this.inventory = [[], [], [], []];
+    this.itemPrice = 0;
   }
 
   addInventory({ name, price, count }) {
@@ -35,10 +36,8 @@ class VendingMachine {
   checkIfEnoughMoney() {
     const rowIndices = { A: 0, B: 1, C: 2, D: 3 };
     const rowIndex = rowIndices[this.selectedRow];
-    const itemPrice = this.inventory[rowIndex][this.selectedColumn - 1][
-      "price"
-    ];
-    if (this.balance >= itemPrice) {
+    this.itemPrice = this.inventory[rowIndex][this.selectedColumn - 1]["price"];
+    if (this.balance >= this.itemPrice) {
       return true;
     }
     return false;
@@ -52,6 +51,11 @@ class VendingMachine {
     }
     console.log("Sorry please make another selection");
     return false;
+  }
+  dispenseChange() {
+    if (this.balance > this.itemPrice) {
+      return this.balance - this.itemPrice;
+    }
   }
   selectRow(rowLetter) {
     const validRows = ["A", "B", "C", "D"];

@@ -131,4 +131,13 @@ describe("vending machine", () => {
 
     expect(machine.checkIfInventory()).to.equal(true);
   });
+
+  it("should return the proper change after they buy something", () => {
+    const machine = new VendingMachine();
+    machine.addInventory(coffee);
+    machine.insertCoin(500);
+    machine.selectRow("A");
+    machine.selectColumn(1);
+    expect(machine.dispenseChange()).to.equal(250);
+  });
 });
