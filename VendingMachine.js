@@ -24,7 +24,27 @@ class VendingMachine {
     }
   }
 
-  pushOrderButton() {}
+  pushOrderButton() {
+    const rowIndices = { A: 0, B: 1, C: 2, D: 3 };
+    const rowIndex = rowIndices[this.selectedRow];
+    let availability;
+    let item;
+    if (this.selectedRow && this.selectedColumn) {
+      availability = this.checkIfInventory(rowIndex);
+      item = this.inventory[rowIndex][this.selectedColumn - 1];
+    } else {
+      console.log("Please make a valid selection.");
+    }
+    if (availability && this.checkIfEnoughMoney(item.price)) {
+      console.log("Please enjoy your", item.name);
+      item.count--;
+      if (this.balance > item.price) {
+        this.dispenseChange(item.price);
+      }
+    }
+    this.selectedRow = null;
+    this.selectedColumn = null;
+  }
 
   insertCoin(number) {
     this.balance = number;
@@ -51,10 +71,7 @@ class VendingMachine {
     console.log(this.selectedColumn);
   }
 
-  checkIfInventory() {
-    const rowIndices = { A: 0, B: 1, C: 2, D: 3 };
-    const rowIndex = rowIndices[this.selectedRow];
-
+  checkIfInventory(rowIndex) {
     if (this.inventory[rowIndex][this.selectedColumn - 1]) {
       return true;
     }
@@ -63,11 +80,6 @@ class VendingMachine {
   }
 
   checkIfEnoughMoney(price) {
-    // const rowIndices = { A: 0, B: 1, C: 2, D: 3 };
-    // const rowIndex = rowIndices[this.selectedRow];
-    // const itemPrice = this.inventory[rowIndex][this.selectedColumn - 1][
-    //   "price"
-    // ];
     if (this.balance >= price) {
       return true;
     }

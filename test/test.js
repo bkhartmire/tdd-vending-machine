@@ -127,12 +127,12 @@ describe("vending machine", () => {
     machine.selectRow("A");
     machine.selectColumn(2);
 
-    expect(machine.checkIfInventory()).to.be.false;
+    expect(machine.checkIfInventory(0)).to.be.false;
 
     machine.selectRow("A");
     machine.selectColumn(1);
 
-    expect(machine.checkIfInventory()).to.be.true;
+    expect(machine.checkIfInventory(0)).to.be.true;
   });
 
   it("should return the proper change after they buy something", () => {
@@ -161,7 +161,7 @@ describe("vending machine", () => {
     machine.selectColumn(1);
     machine.pushOrderButton();
 
-    expect(machine.inventory[0].count).to.equal(6);
+    expect(machine.inventory[0][0].count).to.equal(6);
     expect(machine.till).to.deep.equal({
       10: 10,
       50: 9,
