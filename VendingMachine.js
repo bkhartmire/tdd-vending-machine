@@ -30,6 +30,17 @@ class VendingMachine {
       }
     }
   }
+  checkIfEnoughMoney() {
+    const rowIndices = { A: 0, B: 1, C: 2, D: 3 };
+    const rowIndex = rowIndices[this.selectedRow];
+    const itemPrice = this.inventory[rowIndex][this.selectedColumn - 1][
+      "price"
+    ];
+    if (this.balance >= itemPrice) {
+      return true;
+    }
+    return false;
+  }
   selectRow(rowLetter) {
     const validRows = ["A", "B", "C", "D"];
     if (validRows.includes(rowLetter)) {

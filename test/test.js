@@ -107,12 +107,14 @@ describe("vending machine", () => {
     machine.addInventory(coffee);
     expect(machine.inventory).to.deep.equal(expectedInventory);
   });
-  // it("should check if the user put in enough money", () => {
-  //   const machine = new VendingMachine();
-  //   machine.insertCoin(500);
-  //   machine.selectRow('A');
-  //   machine.selectColumn(1);
-  //   expect(machine.checkIfEnoughMoney()).to.equal(true);
-
-  // });
+  it("should check if the user put in enough money", () => {
+    const machine = new VendingMachine();
+    machine.addInventory(coffee);
+    machine.insertCoin(100);
+    machine.selectRow("A");
+    machine.selectColumn(1);
+    expect(machine.checkIfEnoughMoney()).to.equal(false);
+    machine.insertCoin(500);
+    expect(machine.checkIfEnoughMoney()).to.equal(true);
+  });
 });
