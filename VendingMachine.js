@@ -4,7 +4,6 @@
 What is that? Well, glad you asked.
 Read about it here: https://www.sitepoint.com/understanding-module-exports-exports-node-js/
 */
-// const rowIndices = { A: 0, B: 1, C: 2, D: 3 };
 
 class VendingMachine {
   constructor() {
@@ -13,7 +12,7 @@ class VendingMachine {
     this.selectedRow = null;
     this.selectedColumn = null;
     this.inventory = [[], [], [], []];
-    this.itemPrice = 0;
+    //i eventually want to get rid of itemPrice
   }
 
   addInventory({ name, price, count }) {
@@ -36,8 +35,10 @@ class VendingMachine {
   checkIfEnoughMoney() {
     const rowIndices = { A: 0, B: 1, C: 2, D: 3 };
     const rowIndex = rowIndices[this.selectedRow];
-    this.itemPrice = this.inventory[rowIndex][this.selectedColumn - 1]["price"];
-    if (this.balance >= this.itemPrice) {
+    const itemPrice = this.inventory[rowIndex][this.selectedColumn - 1][
+      "price"
+    ];
+    if (this.balance >= itemPrice) {
       return true;
     }
     return false;
@@ -49,13 +50,27 @@ class VendingMachine {
     if (this.inventory[rowIndex][this.selectedColumn - 1]) {
       return true;
     }
-    console.log("Sorry please make another selection");
+    console.log("Sorry, please make another selection.");
     return false;
   }
-  dispenseChange() {
-    if (this.balance > this.itemPrice) {
-      return this.balance - this.itemPrice;
+  dispenseChange(price) {
+    const coins = {};
+    const change = this.balance - price;
+    let remaining = change;
+    while (remaining > 0) {
+      if (remaining >= 100) {
+        coins[100] ? coins[100]++ : (coins[100] = 1);
+        remaining -= 100;
+      } else if (remaining >= 50) {
+        coins[50] ? coins[50]++ : (coins[50] = 1);
+        remaining -= 50;
+      } else if (remaining >= 10) {
+        coins[10] ? coins[10]++ : (coins[10] = 1);
+        remaining -= 10;
+      }
     }
+    console.log("Here's your change:", change, coins);
+    return change;
   }
   selectRow(rowLetter) {
     const validRows = ["A", "B", "C", "D"];

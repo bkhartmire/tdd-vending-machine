@@ -22,10 +22,10 @@ describe("vending machine", () => {
 
     // Assert
     expect(machine.till).to.deep.equal({
-      10: 0,
-      50: 0,
-      100: 0,
-      500: 1,
+      10: 10,
+      50: 10,
+      100: 10,
+      500: 11,
     });
     expect(machine.balance).to.equal(500); // Use an ES6 getter
   });
@@ -138,6 +138,6 @@ describe("vending machine", () => {
     machine.insertCoin(500);
     machine.selectRow("A");
     machine.selectColumn(1);
-    expect(machine.dispenseChange()).to.equal(250);
+    expect(machine.dispenseChange(coffee.price)).to.equal(250);
   });
 });
