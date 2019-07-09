@@ -7,12 +7,6 @@ describe("vending machine", () => {
   const jungleJuice = { name: `Jungle Juice`, price: 700, count: 10 };
   const icedCoffee = { name: "Starbucks", price: 500, count: 2 };
 
-  // const inventory = [
-  //   [juice, coffee, jungleJuice, icedCoffee],
-  //   [coffee, jungleJuice, icedCoffee, juice],
-  //   [jungleJuice, icedCoffee, juice, coffee],
-  //   [icedCoffee, juice, coffee, jungleJuice],
-  // ];
   new it("should accept valid coins", () => {
     // Setup
     const machine = new VendingMachine();
@@ -29,6 +23,7 @@ describe("vending machine", () => {
     });
     expect(machine.balance).to.equal(500); // Use an ES6 getter
   });
+
   it("should have a selectRow method that checks for valid row input", () => {
     const machine = new VendingMachine();
     expect(machine.selectedRow).to.equal(null);
@@ -41,6 +36,7 @@ describe("vending machine", () => {
     machine.selectRow("A");
     expect(machine.selectedRow).to.equal("A");
   });
+
   it("should have a selectColumn method that checks for valid column input", () => {
     const machine = new VendingMachine();
     expect(machine.selectedColumn).to.equal(null);
@@ -53,6 +49,7 @@ describe("vending machine", () => {
     machine.selectColumn(2);
     expect(machine.selectedColumn).to.equal(2);
   });
+
   it("should have an add inventory method", () => {
     const machine = new VendingMachine();
     machine.addInventory(coffee);
@@ -107,37 +104,71 @@ describe("vending machine", () => {
     machine.addInventory(coffee);
     expect(machine.inventory).to.deep.equal(expectedInventory);
   });
+
   it("should check if the user put in enough money", () => {
     const machine = new VendingMachine();
+
     machine.addInventory(coffee);
     machine.insertCoin(100);
     machine.selectRow("A");
     machine.selectColumn(1);
-    expect(machine.checkIfEnoughMoney()).to.equal(false);
+
+    expect(machine.checkIfEnoughMoney(coffee.price)).to.be.false;
+
     machine.insertCoin(500);
-    expect(machine.checkIfEnoughMoney()).to.equal(true);
+
+    expect(machine.checkIfEnoughMoney(coffee.price)).to.be.true;
   });
 
   it("should check if there is any inventory at user selection", () => {
     const machine = new VendingMachine();
+
     machine.addInventory(coffee);
     machine.selectRow("A");
     machine.selectColumn(2);
 
-    expect(machine.checkIfInventory()).to.equal(false);
+    expect(machine.checkIfInventory()).to.be.false;
 
     machine.selectRow("A");
     machine.selectColumn(1);
 
-    expect(machine.checkIfInventory()).to.equal(true);
+    expect(machine.checkIfInventory()).to.be.true;
   });
 
   it("should return the proper change after they buy something", () => {
     const machine = new VendingMachine();
+
     machine.addInventory(coffee);
     machine.insertCoin(500);
     machine.selectRow("A");
     machine.selectColumn(1);
+
     expect(machine.dispenseChange(coffee.price)).to.equal(250);
+    expect(machine.till).to.deep.equal({
+      10: 10,
+      50: 9,
+      100: 8,
+      500: 11,
+    });
+  });
+
+  it("should have a button that submits order if user did everything correctly", () => {
+    const machine = new VendingMachine();
+
+    machine.addInventory(coffee);
+    machine.insertCoin(500);
+    machine.selectRow("A");
+    machine.selectColumn(1);
+    machine.pushOrderButton();
+
+    expect(machine.inventory[0].count).to.equal(6);
+    expect(machine.till).to.deep.equal({
+      10: 10,
+      50: 9,
+      100: 8,
+      500: 11,
+    });
+    expect(machine.selectedRow).to.be.null;
+    expect(machine.selectedColumn).to.be.null;
   });
 });

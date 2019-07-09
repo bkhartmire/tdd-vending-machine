@@ -12,7 +12,6 @@ class VendingMachine {
     this.selectedRow = null;
     this.selectedColumn = null;
     this.inventory = [[], [], [], []];
-    //i eventually want to get rid of itemPrice
   }
 
   addInventory({ name, price, count }) {
@@ -24,6 +23,9 @@ class VendingMachine {
       }
     }
   }
+
+  pushOrderButton() {}
+
   insertCoin(number) {
     this.balance = number;
     for (const key in this.till) {
@@ -32,46 +34,7 @@ class VendingMachine {
       }
     }
   }
-  checkIfEnoughMoney() {
-    const rowIndices = { A: 0, B: 1, C: 2, D: 3 };
-    const rowIndex = rowIndices[this.selectedRow];
-    const itemPrice = this.inventory[rowIndex][this.selectedColumn - 1][
-      "price"
-    ];
-    if (this.balance >= itemPrice) {
-      return true;
-    }
-    return false;
-  }
-  checkIfInventory() {
-    const rowIndices = { A: 0, B: 1, C: 2, D: 3 };
-    const rowIndex = rowIndices[this.selectedRow];
 
-    if (this.inventory[rowIndex][this.selectedColumn - 1]) {
-      return true;
-    }
-    console.log("Sorry, please make another selection.");
-    return false;
-  }
-  dispenseChange(price) {
-    const coins = {};
-    const change = this.balance - price;
-    let remaining = change;
-    while (remaining > 0) {
-      if (remaining >= 100) {
-        coins[100] ? coins[100]++ : (coins[100] = 1);
-        remaining -= 100;
-      } else if (remaining >= 50) {
-        coins[50] ? coins[50]++ : (coins[50] = 1);
-        remaining -= 50;
-      } else if (remaining >= 10) {
-        coins[10] ? coins[10]++ : (coins[10] = 1);
-        remaining -= 10;
-      }
-    }
-    console.log("Here's your change:", change, coins);
-    return change;
-  }
   selectRow(rowLetter) {
     const validRows = ["A", "B", "C", "D"];
     if (validRows.includes(rowLetter)) {
@@ -86,6 +49,53 @@ class VendingMachine {
       this.selectedColumn = columnNumber;
     }
     console.log(this.selectedColumn);
+  }
+
+  checkIfInventory() {
+    const rowIndices = { A: 0, B: 1, C: 2, D: 3 };
+    const rowIndex = rowIndices[this.selectedRow];
+
+    if (this.inventory[rowIndex][this.selectedColumn - 1]) {
+      return true;
+    }
+    console.log("Sorry, please make another selection.");
+    return false;
+  }
+
+  checkIfEnoughMoney(price) {
+    // const rowIndices = { A: 0, B: 1, C: 2, D: 3 };
+    // const rowIndex = rowIndices[this.selectedRow];
+    // const itemPrice = this.inventory[rowIndex][this.selectedColumn - 1][
+    //   "price"
+    // ];
+    if (this.balance >= price) {
+      return true;
+    }
+    console.log("Insufficient funds.");
+    return false;
+  }
+
+  dispenseChange(price) {
+    const coins = {};
+    const change = this.balance - price;
+    let remaining = change;
+    while (remaining > 0) {
+      if (remaining >= 100 && this.till[100] > 0) {
+        coins[100] ? coins[100]++ : (coins[100] = 1);
+        this.till[100]--;
+        remaining -= 100;
+      } else if (remaining >= 50 && this.till[50] > 0) {
+        coins[50] ? coins[50]++ : (coins[50] = 1);
+        this.till[50]--;
+        remaining -= 50;
+      } else if (remaining >= 10 && this.till[10] > 0) {
+        coins[10] ? coins[10]++ : (coins[10] = 1);
+        this.till[10]--;
+        remaining -= 10;
+      }
+    }
+    console.log("Here's your change:", change, coins);
+    return change;
   }
 }
 
