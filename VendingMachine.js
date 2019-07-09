@@ -9,6 +9,9 @@ class VendingMachine {
   constructor() {
     this.balance = 0;
     this.till = { 10: 0, 50: 0, 100: 0, 500: 0 };
+    this.selectedRow = null;
+    this.selectedColumn = null;
+    this.inventory = [];
   }
   insertCoin(number) {
     this.balance = number;
@@ -17,6 +20,21 @@ class VendingMachine {
         this.till[key]++;
       }
     }
+  }
+  selectRow(rowLetter) {
+    const validRows = ["A", "B", "C", "D"];
+    if (validRows.includes(rowLetter)) {
+      this.selectedRow = rowLetter;
+    }
+    console.log(this.selectedRow);
+  }
+
+  selectColumn(columnNumber) {
+    const validColumns = [1, 2, 3, 4];
+    if (validColumns.includes(columnNumber)) {
+      this.selectedColumn = columnNumber;
+    }
+    console.log(this.selectedColumn);
   }
 }
 
