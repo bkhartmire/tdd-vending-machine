@@ -61,7 +61,7 @@ class VendingMachine {
       console.log("Please make a valid selection.");
     }
     if (availability && this.checkIfEnoughMoney(item.price)) {
-      console.log("Please enjoy your", item.name);
+      console.log("Here is your", item.name);
       item.count--;
       if (this.balance > item.price) {
         this.dispenseChange(item.price);
