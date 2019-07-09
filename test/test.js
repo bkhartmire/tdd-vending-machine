@@ -117,4 +117,18 @@ describe("vending machine", () => {
     machine.insertCoin(500);
     expect(machine.checkIfEnoughMoney()).to.equal(true);
   });
+
+  it("should check if there is any inventory at user selection", () => {
+    const machine = new VendingMachine();
+    machine.addInventory(coffee);
+    machine.selectRow("A");
+    machine.selectColumn(2);
+
+    expect(machine.checkIfInventory()).to.equal(false);
+
+    machine.selectRow("A");
+    machine.selectColumn(1);
+
+    expect(machine.checkIfInventory()).to.equal(true);
+  });
 });

@@ -1,9 +1,10 @@
 // your class here
 /*
-  >>> Don't forget to use module.exports!
-  What is that? Well, glad you asked.
-  Read about it here: https://www.sitepoint.com/understanding-module-exports-exports-node-js/
+>>> Don't forget to use module.exports!
+What is that? Well, glad you asked.
+Read about it here: https://www.sitepoint.com/understanding-module-exports-exports-node-js/
 */
+// const rowIndices = { A: 0, B: 1, C: 2, D: 3 };
 
 class VendingMachine {
   constructor() {
@@ -13,6 +14,7 @@ class VendingMachine {
     this.selectedColumn = null;
     this.inventory = [[], [], [], []];
   }
+
   addInventory({ name, price, count }) {
     const newItem = { name: name, price: price, count: count };
     for (const row of this.inventory) {
@@ -39,6 +41,16 @@ class VendingMachine {
     if (this.balance >= itemPrice) {
       return true;
     }
+    return false;
+  }
+  checkIfInventory() {
+    const rowIndices = { A: 0, B: 1, C: 2, D: 3 };
+    const rowIndex = rowIndices[this.selectedRow];
+
+    if (this.inventory[rowIndex][this.selectedColumn - 1]) {
+      return true;
+    }
+    console.log("Sorry please make another selection");
     return false;
   }
   selectRow(rowLetter) {
